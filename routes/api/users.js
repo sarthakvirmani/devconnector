@@ -13,6 +13,8 @@ router.get("/test", (req, res) => res.json({ msg: "users works" }));
 // desc register a user
 // access public
 router.post("/register", (req, res) => {
+  // console.info(req.body.email);
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "email already exists" });
@@ -22,6 +24,7 @@ router.post("/register", (req, res) => {
         r: "pg", //rating
         d: "mm" //default
       });
+
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -45,22 +48,34 @@ router.post("/register", (req, res) => {
 // @Route POST api/users/login
 // desc Login User/Returning JWT(json web token)
 // access public
-// router.post("./login", (req, res) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   //Find user by email
-//   User.findOne({ email }).then(user => {
-//     if (!user) {
-//       return res.status(404).json({ email: "user not found" });
-//     }
-//     //Check Password
-//     bcrypt.compare(password, user.password).then(isMatch => {
-//       if (isMatch) {
-//         res.json({ msg: "Success" });
-//       } else {
-//         return res.status(400).json({ password: "Incorrect Password" });
-//       }
-//     });
-//   });
-// });
+
+router.post("/login", (req, res) => {
+  console.info(req.body.email);
+  const email = req.body.email;
+
+  const password = req.body.password;
+  //Find user by email
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      return res.status(404).json({ email: "user not found" });
+    }
+
+    //Check Password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        res.json({ msg: "Success" });
+      } else {
+        return res.status(400).json({ password: "Incorrect Password" });
+      }
+      //Check Password
+      // bcrypt.compare(password, user.password).then(isMatch => {
+      //   if (isMatch) {
+      //     res.json({ msg: "Success" });
+      //   } else {
+      //     return res.status(400).json({ password: "Incorrect Password" });
+      //   }
+    });
+  });
+});
+
 module.exports = router;

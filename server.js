@@ -5,13 +5,23 @@ const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
 const app = express();
 const bodyParser = require("body-parser");
-//DB Config
+// const MongoClient1 = require("mongodb").MongoClient;
+
+// DB Config
 const db = require("./config/keys").mongoURI;
-//Connect Mongo
+// Connect Mongo
 mongoose
-  .connect(db)
+  .connect(db, { useNewUrlParser: true })
   .then(() => console.log("Mongo is connected"))
   .catch(err => console.log(err));
+// var MongoClient = require("mongodb").MongoClient;
+
+// Connect to the db
+// MongoClient.connect("mongodb://localhost:27017/MyDb", function(err, db) {
+//   if (err) throw err;
+//   db.connect(console.log("Mongo is connected"));
+//   //Write databse Insert/Update/Query code here..
+// });
 //Enabling body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
