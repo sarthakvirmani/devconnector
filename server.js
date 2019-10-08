@@ -5,7 +5,7 @@ const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
 const app = express();
 const bodyParser = require("body-parser");
-// const MongoClient1 = require("mongodb").MongoClient;
+const passport = require("passport");
 
 // DB Config
 const db = require("./config/keys").mongoURI;
@@ -16,17 +16,16 @@ mongoose
   .catch(err => console.log(err));
 // var MongoClient = require("mongodb").MongoClient;
 
-// Connect to the db
-// MongoClient.connect("mongodb://localhost:27017/MyDb", function(err, db) {
-//   if (err) throw err;
-//   db.connect(console.log("Mongo is connected"));
-//   //Write databse Insert/Update/Query code here..
-// });
 //Enabling body parser
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get("/", (req, res) => res.send("Hello!"));
+
+//passport middleware
+app.use(passport.initialize());
+//passport config
+require("./config/passport")(passport);
 
 app.use("/api/users", users);
 app.use("/api/posts", posts);
